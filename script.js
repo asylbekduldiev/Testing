@@ -90,4 +90,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
     setClock('.timer', deadline);
 
+    const modalTrigger = document.querySelectorAll("[data-modal]")
+            modal = document.querySelector('.modal')
+            modalCloseBtn = document.querySelector('[data-close]')
+    
+    function closeModal(){
+        modal.classList.toggle("show")
+        document.body.style.overflow = ""
+    }
+    modalTrigger.forEach(btn => {
+        btn.addEventListener('click', () => {closeModal()})
+    })
+
+    modalCloseBtn.addEventListener('click', closeModal)
+
+    modal.addEventListener('click', (e) => {e.target === modal ? closeModal() : null})
+
+    document.addEventListener('keydown', (e) => {e.code === 'Escape' && modal.classList.contains('show') ? closeModal() : null})
 });
