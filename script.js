@@ -90,16 +90,28 @@ window.addEventListener('DOMContentLoaded', function() {
 
     setClock('.timer', deadline);
 
+    //Modal;
+
     const modalTrigger = document.querySelectorAll("[data-modal]")
             modal = document.querySelector('.modal')
             modalCloseBtn = document.querySelector('[data-close]')
-    
+
+    function openModal(){
+        modal.classList.add("show")
+        modal.classList.remove("hide")
+        document.body.style.overflow = "hidden"
+
+        clearTimeout(modalTimerId)
+    }
+
     function closeModal(){
         modal.classList.toggle("show")
         document.body.style.overflow = ""
     }
+
+
     modalTrigger.forEach(btn => {
-        btn.addEventListener('click', () => {closeModal()})
+        btn.addEventListener('click', () => {openModal()})
     })
 
     modalCloseBtn.addEventListener('click', closeModal)
@@ -107,4 +119,15 @@ window.addEventListener('DOMContentLoaded', function() {
     modal.addEventListener('click', (e) => {e.target === modal ? closeModal() : null})
 
     document.addEventListener('keydown', (e) => {e.code === 'Escape' && modal.classList.contains('show') ? closeModal() : null})
+
+    let modalTimerId = setTimeout(openModal, 5000)
+
+    function showModalByScroll() {
+        if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1){
+            openModal()
+            window.removeEventListener('scroll', showModalByScroll)
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll)
 });
