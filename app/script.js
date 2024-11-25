@@ -1,4 +1,8 @@
+const { functionDeclaration } = require("@babel/types");
+const { response } = require("express");
+const { resolve } = require("path");
 const { func } = require("prop-types");
+const { reject } = require("q");
 
 window.addEventListener('DOMContentLoaded', function() {
 
@@ -286,61 +290,97 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function FetchUser(callback){
+// function FetchUser(callback){
+//     setTimeout(() => {
+//         const data = {id: 1, name: 'Alex'}
+//         callback(data)
+//     }, 1000)
+
+// }
+
+// function FetchUserGames(id, callback){
+//     setTimeout(() => {
+//         const data = ['game1', 'game2'];
+//         callback(data)
+//     }, 1000)
+// }
+
+// function run(){
+//     FetchUser((userinfo) => {
+//         console.log(userinfo)
+
+//         FetchUserGames(userinfo.id, (usergames) => {
+//             console.log(usergames)
+//         }) 
+//     })
+
+// }
+
+// run()
+
+// function FetchUser(){
+//     return data = new Promise((resolve,reject) => {
+//         setTimeout(() => {
+//             const data = { id : 1, name: 'Alex'}
+
+//             resolve(data)
+//         }, 1000)
+//     })
+// }
+
+// function FetchGame(id){
+//     return data = new Promise((resolve,reject) => {
+//         setTimeout(() => {
+//             const data = ['game1', 'game2']
+
+//             resolve(data)
+//         }, 1000)
+//     })
+// }
+
+// function run(){
+//     fetchUserData()
+//         .then((userData) => {
+
+//             FetchGame(userData).then((usergames) => {
+//                 console.log(usergames)
+//             })
+//             console.log(userData)
+//         })
+// }
+
+// run()
+
+console.log('Запрос Данных')
+
+let promise = new Promise(function(resolve, reject){
     setTimeout(() => {
-        const data = {id: 1, name: 'Alex'}
-        callback(data)
-    }, 1000)
+        console.log("Loading")
+    
+        const product = {
+            name: 'TV',
+            price: '200'
+        }
 
-}
+        resolve(product)
+    }, 2000);
+})
 
-function FetchUserGames(id, callback){
-    setTimeout(() => {
-        const data = ['game1', 'game2'];
-        callback(data)
-    }, 1000)
-}
-
-function run(){
-    FetchUser((userinfo) => {
-        console.log(userinfo)
-
-        FetchUserGames(userinfo.id, (usergames) => {
-            console.log(usergames)
-        }) 
-    })
-
-}
-
-run()
-
-function FetchUser(){
-    return data = new Promise((resolve,reject) => {
+promise.then((product) => {
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const data = { id : 1, name: 'Alex'}
-
-            resolve(data)
-        }, 1000)
+            product.status = 'order'
+            resolve(product)
+        },2000)
     })
-}
+}).then(data => {
+    data.modify = true
+    return data
+}).then(data => {
+    console.log(data)
+}).catch(() => {
+    console.error("Error")
+}).finally(() => {
+    console.log('Final')
+})
 
-function FetchGame(id){
-    return data = new Promise((resolve,reject) => {
-        setTimeout(() => {
-            const data = ['game1', 'game2']
-
-            resolve(data)
-        }, 1000)
-    })
-}
-
-function run(){
-    fetchUserData()
-        .then((userData) => {
-
-            fetchUserData(userData)
-            console.log(userData)
-        })
-}
-
-run()
