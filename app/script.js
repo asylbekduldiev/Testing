@@ -132,7 +132,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Изменил значение, чтобы не отвлекало
 
     function showModalByScroll() {
-        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
             openModal();
             window.removeEventListener('scroll', showModalByScroll);
         }
@@ -283,3 +283,46 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 4000);
     }
 });
+
+function FetchUser(callback){
+    setTimeout(() => {
+        const data = {id: 1, name: 'Alex'}
+        callback(data)
+    }, 1000)
+
+}
+
+function FetchUserGames(id, callback){
+    setTimeout(() => {
+        const data = ['game1', 'game2'];
+        callback(data)
+    }, 1000)
+}
+
+function run(){
+    FetchUser((userinfo) => {
+        console.log(userinfo)
+
+        FetchUserGames(userinfo.id, (usergames) => {
+            console.log(usergames)
+        }) 
+    })
+
+}
+
+run()
+
+function run(){
+    const data = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            const data = { id : 1, name: 'Alex'}
+
+            resolve(data)
+        }, 1000)
+    })
+
+    console.log(data)
+
+}
+
+run()
