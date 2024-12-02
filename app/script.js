@@ -1,3 +1,5 @@
+const { func } = require("prop-types");
+
 window.addEventListener('DOMContentLoaded', function() {
 
     // Tabs
@@ -312,17 +314,33 @@ function run(){
 
 run()
 
-function run(){
-    const data = new Promise((resolve,reject) => {
+function FetchUser(){
+    return data = new Promise((resolve,reject) => {
         setTimeout(() => {
             const data = { id : 1, name: 'Alex'}
 
             resolve(data)
         }, 1000)
     })
+}
 
-    console.log(data)
+function FetchGame(id){
+    return data = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            const data = ['game1', 'game2']
 
+            resolve(data)
+        }, 1000)
+    })
+}
+
+function run(){
+    fetchUserData()
+        .then((userData) => {
+
+            fetchUserData(userData)
+            console.log(userData)
+        })
 }
 
 run()
