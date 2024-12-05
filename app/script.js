@@ -290,67 +290,71 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// function FetchUser(callback){
-//     setTimeout(() => {
-//         const data = {id: 1, name: 'Alex'}
-//         callback(data)
-//     }, 1000)
+// how to working promise
+function FetchUser(callback){
+    setTimeout(() => {
+        const data = {id: 1, name: 'Alex'}
+        callback(data)
+    }, 1000)
+}
 
-// }
+function FetchUserGames(id, callback){
+    setTimeout(() => {
+        const data = ['game1', 'game2'];
+        callback(data)
+    }, 1000)
+}
 
-// function FetchUserGames(id, callback){
-//     setTimeout(() => {
-//         const data = ['game1', 'game2'];
-//         callback(data)
-//     }, 1000)
-// }
+function run(){
+    FetchUser((userinfo) => {
+        console.log(userinfo)
 
-// function run(){
-//     FetchUser((userinfo) => {
-//         console.log(userinfo)
+        FetchUserGames(userinfo.id, (usergames) => {
+            console.log(usergames)
+        }) 
+    })
 
-//         FetchUserGames(userinfo.id, (usergames) => {
-//             console.log(usergames)
-//         }) 
-//     })
+}
 
-// }
+run() //{ id: 1, name: 'Alex' }
+      //[ 'game1', 'game2' ]
 
-// run()
 
-// function FetchUser(){
-//     return data = new Promise((resolve,reject) => {
-//         setTimeout(() => {
-//             const data = { id : 1, name: 'Alex'}
 
-//             resolve(data)
-//         }, 1000)
-//     })
-// }
+//testing promise chain2
+function FetchUser(){
+    return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            const data = { id : 1, name: 'Alex'}
 
-// function FetchGame(id){
-//     return data = new Promise((resolve,reject) => {
-//         setTimeout(() => {
-//             const data = ['game1', 'game2']
+            resolve(data)
+        }, 1000)
+    })
+}
 
-//             resolve(data)
-//         }, 1000)
-//     })
-// }
+function FetchGame(userData){
+    return data = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            const data = ['game1', 'game2']
 
-// function run(){
-//     fetchUserData()
-//         .then((userData) => {
+            resolve(data)
+        }, 1000)
+    })
+}
 
-//             FetchGame(userData).then((usergames) => {
-//                 console.log(usergames)
-//             })
-//             console.log(userData)
-//         })
-// }
+function run(){
+    FetchUser()
+        .then((userData) => {
+            return FetchGame(userData.id)
+        })
+        .then((usergames) => {
+            console.log(usergames)
+        })
+}
 
-// run()
+run()
 
+//testing promise chain2
 console.log('Запрос Данных')
 
 let promise = new Promise(function(resolve, reject){
@@ -384,19 +388,23 @@ promise.then((product) => {
     console.log('Final')
 })
 
+
+//testing all and race
 const test = time => {
     return new Promise(resolve => {
         setTimeout(() => resolve(), time)
     })
 }
 
-// test(1000).then(() => console.log('1000ms'))
-// test(2000).then(() => console.log('2000ms'))
+test(1000).then(() => console.log('1000ms'))
+test(2000).then(() => console.log('2000ms'))
 
-// Promise.all([test(1000), test(2000)]).then(() => {
-//     console.log('ALL')
-// })
+//All
+Promise.all([test(1000), test(2000)]).then(() => {
+    console.log('ALL')
+})
 
+//Race
 Promise.race([test(1000), test(1000)]).then(() => {
     console.log('ALL')
 })
