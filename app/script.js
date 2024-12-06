@@ -321,7 +321,7 @@ run() //{ id: 1, name: 'Alex' }
 
 
 
-//testing promise chain2
+//testing promise chain1
 function FetchUser(){
     return new Promise((resolve,reject) => {
         setTimeout(() => {
@@ -352,7 +352,8 @@ function run(){
         })
 }
 
-run()
+run() //[ 'game1', 'game2' ]
+
 
 //testing promise chain2
 console.log('Запрос Данных')
@@ -386,7 +387,10 @@ promise.then((product) => {
     console.error("Error")
 }).finally(() => {
     console.log('Final')
-})
+})//Запрос Данных
+  //Loading
+  //{ name: 'TV', price: '200', status: 'order', modify: true }
+  //Final
 
 
 //testing all and race
@@ -396,16 +400,63 @@ const test = time => {
     })
 }
 
-test(1000).then(() => console.log('1000ms'))
-test(2000).then(() => console.log('2000ms'))
-
+// test(1000).then(() => console.log('1000ms'))
+// test(2000).then(() => console.log('2000ms'))
+//=> 1000ms
+     //2000ms
 //All
-Promise.all([test(1000), test(2000)]).then(() => {
-    console.log('ALL')
-})
+// Promise.all([test(1000), test(2000)]).then(() => {
+//     console.log('ALL')
+// })
+//All (выполнится второй тест)
 
 //Race
-Promise.race([test(1000), test(1000)]).then(() => {
+Promise.race([test(5000), test(5000)]).then(() => {
     console.log('ALL')
 })
+//All (выполнится первый тест)
 
+
+
+//LinkedList
+class LinkedListNode {
+    constructor(value, next=null){
+        this.value = value
+        this.next = next
+    }
+
+    toString () {
+        return `${this.value}`
+    }
+
+}
+
+class LinkedList {
+    constructor() {
+        this.head = null
+        this.tail = null
+    }
+
+    append(value) {
+        const newNode = new LinkedListNode(value)
+
+        if(!this.head || !this.tail){
+            this.head = newNode
+            this.tail = newNode
+
+            return this
+        }
+
+        this.tail.next = newNode
+
+        this.tail = newNode
+
+        return this
+    }
+}
+
+const list = new LinkedList()
+
+list.append('a').append('b').append('c')
+
+console.log(JSON.stringify(list))
