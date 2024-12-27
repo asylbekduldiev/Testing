@@ -1,8 +1,4 @@
-const { functionDeclaration } = require("@babel/types");
-const { response } = require("express");
-const { resolve } = require("path");
 const { func } = require("prop-types");
-const { reject } = require("q");
 
 window.addEventListener('DOMContentLoaded', function() {
 
@@ -134,7 +130,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const modalTimerId = setTimeout(openModal, 300000);
+    const modalTimerId = setTimeout(openModal, 700000);
     // Изменил значение, чтобы не отвлекало
 
     function showModalByScroll() {
@@ -240,29 +236,47 @@ window.addEventListener('DOMContentLoaded', function() {
             `;
             form.insertAdjacentElement('afterend', statusMessage);
         
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-            const formData = new FormData(form);
+            // const request = new XMLHttpRequest();
+            const formData = new FormData(form)
 
             const object = {};
             formData.forEach(function(value, key){
                 object[key] = value;
             });
-            const json = JSON.stringify(object);
 
-            request.send(json);
+            fetch('server.php', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(object)
+            })
+            .then(data => data.text)    
+            .then(data => {
+                console.log(data)
+                showThanksModal()
+                statusMessage.remove()
+            }).catch(() => {
+                showThanksModal(message.failure);
+            }).finally(() => {
+                form.reset()
+            })
 
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    statusMessage.remove();
-                    form.reset();
-                } else {
-                    showThanksModal(message.failure);
-                }
-            });
+            // request.open('POST', 's erver.php');
+            // request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            // const formData = new FormData(form);
+            // request.send(json);
+
+            // request.addEventListener('load', () => {
+            //     if (request.status === 200) {
+            //         console.log(request.response);
+            //         showThanksModal(message.success);
+            //         statusMessage.remove();
+            //         form.reset();
+            //     } else {
+            //         showThanksModal(message.failure);
+            //     }
+            // });
         });
     }
 
@@ -290,173 +304,44 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// how to working promise
-function FetchUser(callback){
-    setTimeout(() => {
-        const data = {id: 1, name: 'Alex'}
-        callback(data)
-    }, 1000)
-}
+//Filter()
+const arr = ["Ivan", "Alex", "Andrey", "Arman"]
 
-function FetchUserGames(id, callback){
-    setTimeout(() => {
-        const data = ['game1', 'game2'];
-        callback(data)
-    }, 1000)
-}
-
-function run(){
-    FetchUser((userinfo) => {
-        console.log(userinfo)
-
-        FetchUserGames(userinfo.id, (usergames) => {
-            console.log(usergames)
-        }) 
-    })
-
-}
-
-run() //{ id: 1, name: 'Alex' }
-      //[ 'game1', 'game2' ]
-
-
-
-//testing promise chain1
-function FetchUser(){
-    return new Promise((resolve,reject) => {
-        setTimeout(() => {
-            const data = { id : 1, name: 'Alex'}
-
-            resolve(data)
-        }, 1000)
-    })
-}
-
-function FetchGame(userData){
-    return data = new Promise((resolve,reject) => {
-        setTimeout(() => {
-            const data = ['game1', 'game2']
-
-            resolve(data)
-        }, 1000)
-    })
-}
-
-function run(){
-    FetchUser()
-        .then((userData) => {
-            return FetchGame(userData.id)
-        })
-        .then((usergames) => {
-            console.log(usergames)
-        })
-}
-
-run() //[ 'game1', 'game2' ]
-
-
-//testing promise chain2
-console.log('Запрос Данных')
-
-let promise = new Promise(function(resolve, reject){
-    setTimeout(() => {
-        console.log("Loading")
-    
-        const product = {
-            name: 'TV',
-            price: '200'
-        }
-
-        resolve(product)
-    }, 2000);
+const filt = arr.filter(function(name){
+    return name.length < 5 && name === "Ivan"
 })
 
-promise.then((product) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            product.status = 'order'
-            resolve(product)
-        },2000)
-    })
-}).then(data => {
-    data.modify = true
-    return data
-}).then(data => {
-    console.log(data)
-}).catch(() => {
-    console.error("Error")
-}).finally(() => {
-    console.log('Final')
-})//Запрос Данных
-  //Loading
-  //{ name: 'TV', price: '200', status: 'order', modify: true }
-  //Final
+console.log(filt)
+
+//Map()
+const ans = ["IvAn", "AsYL", "Hello"]
 
 
-//testing all and race
-const test = time => {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(), time)
-    })
-}
+const fil = ans.map(item => item.toLowerCase())
+console.log(fil)
 
-// test(1000).then(() => console.log('1000ms'))
-// test(2000).then(() => console.log('2000ms'))
-//=> 1000ms
-     //2000ms
-//All
-// Promise.all([test(1000), test(2000)]).then(() => {
-//     console.log('ALL')
-// })
-//All (выполнится второй тест)
+//Some()
+const some = ["das", {asd}]
 
-//Race
-Promise.race([test(5000), test(5000)]).then(() => {
-    console.log('ALL')
-})
-//All (выполнится первый тест)
+console.log(some.some(item => typeof(item) === "number"))
 
+//Every()
+const com = [12,32,2,1231]
+console.log(com.every(item => item < 100))
 
+//Reduce()
+const arr1 = [3,32,3,3,2]
+                // sum = 0 , cur = 3 =>
+                // sum = 3, cur = 32 =>
+                // sum = 35, cur = 3 =>
+                // sum = 38, cur = 3 =>
+                // sum = 41, cur = 2 => 
+                // sum = 43, cur = none
+                // red = 43
+const red = arr1.reduce((sum,cur) => sum + cur)
+console.log(red)
 
-//LinkedList
-class LinkedListNode {
-    constructor(value, next=null){
-        this.value = value
-        this.next = next
-    }
+const fru = ["apple", "pear", "grape"]
 
-    toString () {
-        return `${this.value}`
-    }
-
-}
-
-class LinkedList {
-    constructor() {
-        this.head = null
-        this.tail = null
-    }
-
-    append(value) {
-        const newNode = new LinkedListNode(value)
-
-        if(!this.head || !this.tail){
-            this.head = newNode
-            this.tail = newNode
-
-            return this
-        }
-
-        this.tail.next = newNode
-
-        this.tail = newNode
-
-        return this
-    }
-}
-
-const list = new LinkedList()
-
-list.append('a').append('b').append('c')
-
-console.log(JSON.stringify(list))
+const out = fru.reduce((sum, cur) => `${sum} ${cur}`)
+console.log(out)
