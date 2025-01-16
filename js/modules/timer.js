@@ -54,5 +54,5 @@ function timer(){
 
 }
 
-module.exports = timer;
+export default timer;
 
