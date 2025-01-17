@@ -375,7 +375,7 @@ function modal(triggerSelector, modalSelector){
     const modalTimerId = setTimeout(openModal, 300000);
 
     function showModalByScroll() {
-        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
             openModal(modalSelector);
             window.removeEventListener('scroll', showModalByScroll);
         }
